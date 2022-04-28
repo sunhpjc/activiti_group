@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 定义文件输出格式, 编码方式, 输出文件的路径 -->
+    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p ${PID:-} [%15.15t] %-40.40logger{39} : %m%n"/>
+    <property name="charsetEncoding" value="UTF-8"/>
+    <property name="logPath" value="D:/webLog"/>
+
+    <!--控制台日志-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${pattern}</pattern>
+            <charset>${charsetEncoding}</charset>
+        </encoder>
+    </appender>
+    <!-- 运行日志 日期滚动记录-->
+    <appender name="infoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <File>${logPath}/infoLog.log</File>
+        <!--日志记录器的滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 生成日志文件名格式 -->
+            <FileNamePattern>${logPath}/infoLog.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 历史记录存在时间 单位：天 -->
+            <maxHistory>30</maxHistory>
+            <!--如果配置了文件大小的限制,若超出限制则会在文件名后追加索引从0开始将文件拆分-->
+        </rollingPolicy>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+        <encoder>
+            <Pattern>${pattern}</Pattern>
+            <charset>${charsetEncoding}</charset>
+        </encoder>
+    </appender>
+    <!-- 错误日志 日期滚动记录-->
+    <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <File>${logPath}/errorLog.log</File>
+        <!--日志记录器的滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 生成日志文件名格式 -->
+            <FileNamePattern>${logPath}/errorLog.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 历史记录存在时间 单位：天 -->
+            <maxHistory>30</maxHistory>
+            <!--如果配置了文件大小的限制,若超出限制则会在文件名后追加索引从0开始将文件拆分-->
+            <!--<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+            <!--<maxFileSize>2MB</maxFileSize>-->
+            <!--</timeBasedFileNamingAndTriggeringPolicy>-->
+        </rollingPolicy>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+        <encoder>
+            <Pattern>${pattern}</Pattern>
+            <charset>${charsetEncoding}</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!-- 设置日志输出级别 -->
+            <level>ERROR</level>
+        </filter>
+    </appender>
+    <!--配置日志输出的级别-->
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="infoLog"/>
+        <appender-ref ref="errorLog"/>
+    </root>
+</configuration>
